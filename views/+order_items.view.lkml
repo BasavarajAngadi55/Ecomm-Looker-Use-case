@@ -43,7 +43,7 @@ view: +order_items{
   }
   measure: total_gross_margin_amount {
     type: number
-    sql: ${order_items.total_gross_revenue} - ${inventory_items.total_cost} ;;
+    sql: ${order_items.total_gross_revenue} - ${inventory_items.cost} ;;
     value_format_name: usd
     drill_fields: [products.category,products.brand]
     description: "Calculates the total gross margin amount by subtracting the total cost from the total gross revenue."
@@ -51,7 +51,7 @@ view: +order_items{
   measure: average_gross_margin {
     type: number
     sql: CASE WHEN ${order_items.total_gross_revenue} IS NOT NULL THEN
-         (${order_items.total_gross_revenue} - ${inventory_items.total_cost}) / NULLIF(${order_items.total_gross_revenue}, 0)
+         (${order_items.total_gross_revenue} - ${inventory_items.cost}) / NULLIF(${order_items.total_gross_revenue}, 0)
        ELSE NULL END ;;
     value_format_name: usd
     description: "Calculates the average gross margin as a percentage of total gross revenue."
@@ -104,27 +104,5 @@ view: +order_items{
     drill_fields: [order_items.order_id]
     description: "Total sales revenue."
   }
-  measure: total_sales_new_customers {
-    type: sum
-    sql: CASE WHEN ${order_patterns_frequency.is_first_purchase} THEN ${order_items.sale_price} ELSE 0 END ;;
-    description: "Total sales revenue from new customers."
-  }
 
-  measure: total_sales_returning_customers {
-    type: sum
-    sql: CASE WHEN NOT ${order_patterns_frequency.is_first_purchase} THEN ${order_items.sale_price} ELSE 0 END ;;
-    description: "Total sales revenue from returning customers."
-  }
-  measure: percent_new_customers {
-    type: number
-    sql: ${total_sales_new_customers} / NULLIF(${total_sales}, 0) ;;
-    value_format_name: percent_2
-    description: "Percentage of total sales revenue from new customers."
-  }
-  measure: percent_returning_customers {
-    type: number
-    sql: ${total_sales_returning_customers} / NULLIF(${total_sales}, 0) ;;
-    value_format_name: percent_2
-    description: "Percentage of total sales revenue from returning customers."
-  }
 }
