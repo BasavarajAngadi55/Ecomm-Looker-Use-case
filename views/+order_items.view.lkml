@@ -103,6 +103,6 @@ view: +order_items{
     sql: ${order_items.sale_price} ;;
     drill_fields: [order_items.order_id]
     description: "Total sales revenue."
+    value_format: "$#,##0.00" # Changed to USD format with 2 decimals
   }
-
 }
