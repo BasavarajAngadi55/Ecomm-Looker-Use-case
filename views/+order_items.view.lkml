@@ -105,10 +105,5 @@ view: +order_items{
     description: "Total sales revenue."
     value_format: "$#,##0.00" # Changed to USD format with 2 decimals
   }
-  measure: count_new_users {
-    type: count_distinct
-    sql: ${user_id} ;;
-    drill_fields: [user_id, created_date]
-    description: "Total number of distinct new users."
-  }
+
 }
