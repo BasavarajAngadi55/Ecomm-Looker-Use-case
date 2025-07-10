@@ -33,8 +33,10 @@ view: +order_items{
   }
   measure: total_cost {
     type: sum
-    sql: ${inventory_items.cost} ;;
-    description: "Calculates the total cost of inventory items."
+    sql: CASE WHEN ${status} NOT IN ('cancelled', 'returned') THEN ${inventory_items.cost} ELSE 0 END ;;
+    value_format_name: usd_0 # For consistency
+    description: "Total Cost of Goods Sold for non-cancelled/returned items."
+
   }
   measure: average_cost {
     type: average
