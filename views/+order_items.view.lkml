@@ -43,7 +43,7 @@ view: +order_items{
   }
   measure: total_gross_margin_amount {
     type: number
-    sql: ${order_items.total_gross_revenue} - ${inventory_items.cost} ;;
+    sql:${total_gross_revenue} - ${total_cost}  ;;
     value_format_name: usd
     drill_fields: [products.category,products.brand]
     description: "Calculates the total gross margin amount by subtracting the total cost from the total gross revenue."
