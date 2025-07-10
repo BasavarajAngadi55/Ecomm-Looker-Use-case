@@ -58,10 +58,10 @@ view: +order_items{
   }
   measure: gross_margin_percentage {
     type: number
-    sql: ${order_items.total_gross_margin_amount} / NULLIF(${order_items.total_gross_revenue}, 0) ;;
+    sql: ${total_gross_margin_amount} / NULLIF(${total_gross_revenue}, 0) ;;
     value_format_name: percent_2
     drill_fields: [products.category, products.product_id]
-    description: "Calculates the gross margin percentage by dividing the total gross margin amount by the total gross revenue."
+    description: "Calculates the gross margin percentage."
   }
   measure: number_of_items_returned {
     type: count_distinct
