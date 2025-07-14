@@ -106,4 +106,5 @@ view: +order_items{
     value_format: "$#,##0.00" # Changed to USD format with 2 decimals
   }
 
+
 }

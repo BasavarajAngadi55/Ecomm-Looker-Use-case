@@ -58,7 +58,17 @@ view: order_items {
     type: count
     drill_fields: [detail*]
   }
-
+  dimension: creatd_month {
+    type: date_month
+    sql: ${created_date} ;; # Or whatever your date field is named
+  }
+  dimension: is_mtd {
+    type: yesno
+    sql:
+    EXTRACT(MONTH FROM ${created_date}) = EXTRACT(MONTH FROM CURRENT_DATE())
+    AND EXTRACT(YEAR FROM ${created_date}) = EXTRACT(YEAR FROM CURRENT_DATE())
+    AND EXTRACT(DAY FROM ${created_date}) <= EXTRACT(DAY FROM CURRENT_DATE()) ;;
+  }
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
