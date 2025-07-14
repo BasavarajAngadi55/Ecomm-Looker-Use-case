@@ -9,7 +9,7 @@ view: order_items {
   }
   dimension_group: created {
     type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
+    timeframes: [raw, time, date, week, month,day_of_month, quarter, year]
     sql: ${TABLE}.created_at ;;
   }
   dimension_group: delivered {
@@ -42,7 +42,7 @@ view: order_items {
   }
   dimension_group: shipped {
     type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
+    timeframes: [raw, time, date, week, month, day_of_month,quarter, year]
     sql: ${TABLE}.shipped_at ;;
   }
   dimension: status {
@@ -62,15 +62,15 @@ view: order_items {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	id,
-	users.last_name,
-	users.id,
-	users.first_name,
-	inventory_items.id,
-	inventory_items.product_name,
-	products.name,
-	products.id
-	]
+  id,
+  users.last_name,
+  users.id,
+  users.first_name,
+  inventory_items.id,
+  inventory_items.product_name,
+  products.name,
+  products.id
+  ]
   }
 
 }
