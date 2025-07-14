@@ -105,6 +105,11 @@ view: +order_items{
     description: "Total sales revenue."
     value_format: "$#,##0.00" # Changed to USD format with 2 decimals
   }
-
+  measure: mtd_users_count {
+    type: count_distinct
+    sql: ${user_id} ;; # Count distinct users for MTD
+    filters: [is_mtd: "yes"]
+    drill_fields: [user_id, created_date] # Example drill fields
+  }
 
 }
