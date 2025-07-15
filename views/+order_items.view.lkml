@@ -111,5 +111,10 @@ view: +order_items{
     filters: [is_mtd: "yes"]
     drill_fields: [user_id, created_date] # Example drill fields
   }
-
+  measure: prv_mtd_users_count {
+    type: count_distinct
+    sql: ${user_id} ;; # Count distinct users for MTD
+    filters: [is_previous_mtd: "yes"]
+    drill_fields: [user_id, created_date] # Example drill fields
+  }
 }
