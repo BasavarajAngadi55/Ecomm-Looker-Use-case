@@ -69,6 +69,13 @@ view: order_items {
     AND EXTRACT(YEAR FROM ${created_date}) = EXTRACT(YEAR FROM CURRENT_DATE())
     AND EXTRACT(DAY FROM ${created_date}) <= EXTRACT(DAY FROM CURRENT_DATE()) ;;
   }
+  dimension: is_previous_mtd {
+    type: yesno
+    sql:
+    EXTRACT(MONTH FROM ${created_date}) = EXTRACT(MONTH FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+    AND EXTRACT(YEAR FROM ${created_date}) = EXTRACT(YEAR FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+    AND EXTRACT(DAY FROM ${created_date}) <= EXTRACT(DAY FROM CURRENT_DATE()) ;;
+  }
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
