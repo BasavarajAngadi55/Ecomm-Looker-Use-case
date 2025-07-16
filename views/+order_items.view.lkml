@@ -117,4 +117,18 @@ view: +order_items{
     filters: [is_previous_mtd: "yes"]
     drill_fields: [user_id, created_date] # Example drill fields
   }
+  dimension: age_group {
+    type: string
+    sql: |
+      CASE
+        WHEN ${users.age} BETWEEN 15 AND 25 THEN '15 - 25'
+        WHEN ${users.age} BETWEEN 26 AND 35 THEN '26 - 35'
+        WHEN ${users.age} BETWEEN 36 AND 50 THEN '36 - 50'
+        WHEN ${users.age} BETWEEN 51 AND 65 THEN '51 - 65'
+        WHEN ${users.age} >= 66 THEN '66+'
+        ELSE 'Unknown'
+      END ;;
+    order_by_field: age_group # Ensures correct sorting on charts
+    label: "Age Group" # User-friendly label for the UI
+  }
 }
