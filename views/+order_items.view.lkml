@@ -119,7 +119,7 @@ view: +order_items{
   }
   dimension: age_group {
     type: tier
-    tiers: [14,25,35,50,65]
+    tiers: [15,26,36,51,66]
     sql: ${users.age} ;;
     style: integer
     label: "Age Group" # User-friendly label for the UI
