@@ -20,7 +20,7 @@ view: +order_items{
   }
   measure: total_gross_revenue {
     type: sum
-    sql: CASE WHEN ${order_items.status} NOT IN ('cancelled', 'returned') THEN ${order_items.sale_price} ELSE 0 END ;;
+    sql: CASE WHEN ${order_items.status} NOT IN ('Cancelled', 'Returned') THEN ${order_items.sale_price} ELSE 0 END ;;
     value_format_name: usd_0
     drill_fields: [products.brand, products.category]
     description: "Calculates the total gross revenue by summing the sale prices of all items, excluding cancelled or returned items."
