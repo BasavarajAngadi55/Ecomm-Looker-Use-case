@@ -1,14 +1,16 @@
-
 include: "/views/users.view"
+
 view: +users{
-# Add this dimension to the users view file
+  # UPDATED dimension with MTD filtering
   dimension: signup_month_comparison {
     type: string
     sql:
     CASE
       WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(CURRENT_DATE(), MONTH)
+           AND EXTRACT(DAY FROM DATE(${created_date})) <= EXTRACT(DAY FROM CURRENT_DATE())
       THEN 'Current Month'
       WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
+           AND EXTRACT(DAY FROM DATE(${created_date})) <= EXTRACT(DAY FROM CURRENT_DATE())
       THEN 'Previous Month'
       ELSE 'Other'
     END
@@ -18,6 +20,13 @@ view: +users{
   dimension: signup_day_of_month {
     type: number
     sql: EXTRACT(DAY FROM DATE(${created_date})) ;;
+  }
+
+  # ADD this helper dimension to filter in your query
+  dimension: is_valid_mtd_day {
+    type: yesno
+    sql: EXTRACT(DAY FROM DATE(${created_date})) <= EXTRACT(DAY FROM CURRENT_DATE()) ;;
+    hidden: yes
   }
 
 
