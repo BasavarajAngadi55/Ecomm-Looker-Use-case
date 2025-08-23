@@ -4,15 +4,15 @@ view: +users{
 # Add this dimension to the users view file
   dimension: signup_month_comparison {
     type: string
-    sql: |
-          CASE
-            WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(CURRENT_DATE(), MONTH)
-            THEN 'Current Month'
-            WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
-            THEN 'Previous Month'
-            ELSE 'Other'
-          END
-          ;;
+    sql:
+    CASE
+      WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(CURRENT_DATE(), MONTH)
+      THEN 'Current Month'
+      WHEN DATE_TRUNC(DATE(${created_date}), MONTH) = DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
+      THEN 'Previous Month'
+      ELSE 'Other'
+    END
+    ;;
   }
 
   dimension: signup_day_of_month {
