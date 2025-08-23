@@ -20,7 +20,11 @@ view: +users{
     sql: EXTRACT(DAY FROM DATE(${created_date})) ;;
   }
 
-
+  measure: cumulative_users {
+    type: running_total
+    sql: ${id} ;;
+    direction: "row"
+  }
   # # You can specify the table name if it's different from the view name:
   # sql_table_name: my_schema_name.tester ;;
   #
