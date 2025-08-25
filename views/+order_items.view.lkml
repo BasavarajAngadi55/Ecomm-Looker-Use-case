@@ -124,4 +124,14 @@ view: +order_items{
     style: integer
     label: "Age Group" # User-friendly label for the UI
   }
+  dimension: customer_type {
+    type: string
+    sql: CASE
+         WHEN DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), DAY) <= 90
+           THEN 'New Customer'
+         ELSE 'Longer-Term Customer'
+       END ;;
+  }
+
+
 }
