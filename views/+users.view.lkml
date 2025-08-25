@@ -32,7 +32,7 @@ view: +users{
   dimension: customer_type {
     type: string
     sql: CASE
-         WHEN date_diff(now(), ${created_date}) <= 90
+         WHEN DATEDIFF(CURRENT_DATE(), ${created_date}) <= 90
          THEN 'New Customer'
          ELSE 'Longer-Term Customer'
        END ;;
