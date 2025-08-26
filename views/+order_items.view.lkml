@@ -25,12 +25,13 @@ view: +order_items{
     drill_fields: [products.brand, products.category]
     description: "Calculates the total gross revenue by summing the sale prices of all items, excluding cancelled or returned items."
   }
-  measure: percent_of_total_gross_revenue {
+  measure: revenue_percent_of_total {
     type: number
-    sql: ${order_items.total_gross_revenue} / NULLIF(${order_items.total_gross_revenue},0) ;;
-    value_format_name: percent_2
-    description: "Calculates the percentage of total gross revenue contributed by each item."
+    sql: 100.0 * ${total_gross_revenue} / NULLIF(SUM(${total_gross_revenue}) OVER(), 0) ;;
+    value_format: "0.0%"
+    description: "Revenue as a % of total revenue across all brands."
   }
+
   measure: total_cost {
     type: sum
     sql: ${inventory_items.cost} ;;
