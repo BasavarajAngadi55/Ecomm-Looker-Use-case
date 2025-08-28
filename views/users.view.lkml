@@ -56,6 +56,10 @@ view: users {
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
+    drill_fields: [ city]
+    description: "Represents the states of users (for US users)."
+
   }
   dimension: street_address {
     type: string
