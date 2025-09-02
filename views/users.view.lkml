@@ -73,4 +73,18 @@ view: users {
     type: count
     drill_fields: [id, last_name, first_name, order_items.count, events.count]
   }
+
+
+  dimension: cohort {
+    type: string
+    sql: FORMAT_DATE('%Y-%m', ${created_date}) ;; # YYYY-MM format for cohort month
+  }
+
+  dimension: months_since_signup {
+    type: number
+    sql: DATEDIFF('month', ${created_date}_date}, CURRENT_DATE()) ;;
+    label: "Months Since Signup (Current)"
+  }
+
+
 }
