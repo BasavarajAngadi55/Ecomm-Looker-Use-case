@@ -82,8 +82,9 @@ view: users {
 
   dimension: months_since_signup {
     type: number
-    sql: DATEDIFF('month', ${created_date}_date}, CURRENT_DATE()) ;;
     label: "Months Since Signup (Current)"
+    description: "Calculates the number of full months from user signup until today."
+    sql: DATE_DIFF(CURRENT_DATE(), DATE(${TABLE}.created_at), MONTH) ;;
   }
 
 
