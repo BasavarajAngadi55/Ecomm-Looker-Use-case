@@ -38,7 +38,37 @@ view: +users{
        END ;;
   }
 
+# Add these dimensions and measures to your users.view file
 
+  dimension: days_since_signup {
+    type: number
+    description: "The number of days since a customer has signed up on the website."
+    label: "Days Since Signup"
+    sql: DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), DAY) ;;
+  }
+
+  dimension: months_since_signup {
+    type: number
+    description: "The number of months since a customer has signed up on the website."
+    label: "Months Since Signup"
+    sql: DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), MONTH) ;;
+  }
+
+  measure: average_days_since_signup {
+    type: average
+    description: "Average number of days between a customer initially registering and now."
+    label: "Average Number of Days Since Signup"
+    sql: ${days_since_signup} ;;
+    value_format_name: decimal_1
+  }
+
+  measure: average_months_since_signup {
+    type: average
+    description: "Average number of months between a customer initially registering and now."
+    label: "Average Number of Months Since Signup"
+    sql: ${months_since_signup} ;;
+    value_format_name: decimal_1
+  }
   # # You can specify the table name if it's different from the view name:
   # sql_table_name: my_schema_name.tester ;;
   #

@@ -80,12 +80,7 @@ view: users {
     sql: FORMAT_DATE('%Y-%m', ${created_date}) ;; # YYYY-MM format for cohort month
   }
 
-  dimension: months_since_signup {
-    type: number
-    label: "Months Since Signup (Current)"
-    description: "Calculates the number of full months from user signup until today."
-    sql: DATE_DIFF(CURRENT_DATE(), DATE(${TABLE}.created_at), MONTH) ;;
-  }
+
 
 
 }
