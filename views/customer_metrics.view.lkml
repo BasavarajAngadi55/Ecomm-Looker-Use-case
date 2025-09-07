@@ -1,5 +1,5 @@
 # ============================================================================
-# CUSTOMER LIFETIME ANALYSIS VIEW
+# CUSTOMER METRICS VIEW
 # ============================================================================
 
 # First, create a derived table to aggregate customer lifetime metrics
