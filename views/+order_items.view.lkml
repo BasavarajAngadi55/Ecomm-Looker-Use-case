@@ -165,4 +165,22 @@ view: +users{
     sql: ${months_since_signup} ;;
     value_format_name: decimal_1
   }
+  measure: order_count {
+    type: count_distinct
+    sql: ${id} ;;
+    label: "Order Count"
+    description: "The total count of unique orders."
+  }
+  measure: first_order_date {
+    type: min
+    sql: ${created_raw} ;;
+    label: "First Order Date"
+    description: "The date of the first order."
+  }
+  measure: latest_order_date {
+    type: max
+    sql: ${created_raw} ;;
+    label: "Latest Order Date"
+    description: "The date of the most recent order."
+  }
 }
