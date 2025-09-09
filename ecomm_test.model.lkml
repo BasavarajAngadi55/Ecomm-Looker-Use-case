@@ -41,4 +41,23 @@ explore: order_items {
 explore: users {
   label: "Customers"
   description: "User-centric analysis focusing on demographics and behavior."
+
+  # This new join connects all customer lifetime metrics to the user data.
+  join: customer_lifetime_stats {
+    type: left_outer
+    sql_on: ${users.id} = ${customer_lifetime_stats.user_id} ;;
+    relationship: one_to_one
+  }
+}
+
+# Add a new explore for the customer lifetime analysis view.
+explore: customer_lifetime_stats {
+  label: "Customer Lifetime Analysis"
+  description: "Comprehensive analysis of customer behavior, lifetime value, and retention patterns."
+}
+
+# Add a new explore for brand and category repeat purchase analysis.
+explore: brand_category_repeat_analysis {
+  label: "Brand & Category Repeat Purchase Analysis"
+  description: "Analysis of repeat purchase rates by brand and category to identify products driving customer retention."
 }
