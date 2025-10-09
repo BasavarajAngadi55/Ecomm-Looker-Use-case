@@ -108,6 +108,15 @@ view: customer_lifetime_stats {
     sql: ${TABLE}.gender ;;
   }
 
+  dimension: months_since_signup {
+    type: number
+    sql:
+    -- Calculates the difference in months between the user's sign-up date and the current date
+    DATE_DIFF(CURRENT_DATE(), DATE(${user_created_raw}), MONTH)
+  ;;
+    description: "The age of the customer (cohort) in months."
+  }
+
   # ============================================================================
   # CUSTOMER LIFETIME ORDERS - WITH GROUPINGS
   # ============================================================================
