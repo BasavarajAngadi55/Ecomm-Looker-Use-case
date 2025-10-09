@@ -1,6 +1,3 @@
-view: gg {
-# If necessary, uncomment the line below to include explore_source.
-# include: "ecomm_test.model.lkml"
 
   view: add_a_unique_name_1760022136 {
     derived_table: {
