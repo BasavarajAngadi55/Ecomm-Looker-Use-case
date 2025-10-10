@@ -131,7 +131,7 @@ view: +order_items{
   dimension: order_items_customer_type {
     label: "Customer Type (Last 90 Days)"
     type: string
-    sql: |
+    sql:
           CASE
             -- Correct BigQuery function: DATE_ADD(date_expression, INTERVAL quantity part)
             WHEN (DATE(${users.created_date})) >= DATE_ADD(CURRENT_DATE(), INTERVAL -90 DAY)
