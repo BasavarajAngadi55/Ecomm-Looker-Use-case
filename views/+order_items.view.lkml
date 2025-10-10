@@ -128,4 +128,14 @@ view: +order_items{
     value_format_name: percent_2
     description: "Percentage of total sales revenue from returning customers."
   }
+  dimension: customer_type {
+    type: string
+    sql:
+    CASE
+      WHEN ${users.created_date} >= DATEADD('day', -90, CURRENT_DATE())
+      THEN 'New Customer'
+      ELSE 'Existing Customer'
+    END ;;
+  }
+
 }
