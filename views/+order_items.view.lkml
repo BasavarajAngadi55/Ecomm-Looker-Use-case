@@ -128,14 +128,18 @@ view: +order_items{
     value_format_name: percent_2
     description: "Percentage of total sales revenue from returning customers."
   }
-  dimension: customer_type {
+  dimension: order_items_customer_type {
+    label: "Customer Type (Last 90 Days)"
     type: string
-    sql:
-    CASE
-      WHEN ${users.created_date} >= DATEADD('day', -90, CURRENT_DATE())
-      THEN 'New Customer'
-      ELSE 'Existing Customer'
-    END ;;
+    sql: |
+          CASE
+            -- Correct BigQuery function: DATE_ADD(date_expression, INTERVAL quantity part)
+            WHEN (DATE(${users.created_date})) >= DATE_ADD(CURRENT_DATE(), INTERVAL -90 DAY)
+            THEN 'New Customer'
+            ELSE 'Existing Customer'
+          END
+        ;;
+
   }
 
 }
