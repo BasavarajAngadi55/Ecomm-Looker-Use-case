@@ -24,6 +24,15 @@ explore: order_items {
     relationship: many_to_one
   }
 
+  join: customer_lifetime_stats {
+    type: left_outer
+    # The join condition links user ID to the customer stats user ID
+    sql_on: ${users.id} = ${customer_lifetime_stats.user_id} ;;
+    # The relationship is one_to_one because both 'users' and 'customer_lifetime_stats'
+    # have exactly one row per user.
+    relationship: one_to_one
+  }
+
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
@@ -48,7 +57,10 @@ explore: users {
     sql_on: ${users.id} = ${customer_lifetime_stats.user_id} ;;
     relationship: one_to_one
   }
+
 }
+
+
 
 # Add a new explore for the customer lifetime analysis view.
 explore: customer_lifetime_stats {
