@@ -1,5 +1,6 @@
 include: "/views/order_items.view"
 include: "/views/users.view"
+include: "/views/inventory_items.view"
 view: +order_items{
   measure: total_sale_price {
     type: sum
@@ -20,18 +21,17 @@ view: +order_items{
   }
   measure: total_gross_revenue {
     type: sum
-    sql: CASE WHEN ${order_items.status} NOT IN ('Cancelled', 'Returned') THEN ${order_items.sale_price} ELSE 0 END ;;
+    sql: CASE WHEN ${order_items.status} NOT IN ('cancelled', 'returned') THEN ${order_items.sale_price} ELSE 0 END ;;
     value_format_name: usd_0
     drill_fields: [products.brand, products.category]
     description: "Calculates the total gross revenue by summing the sale prices of all items, excluding cancelled or returned items."
   }
-  measure: percent_of_total_gross_reveue{
+  measure: percent_of_total_gross_revenue {
     type: number
-    sql: 100.0 * ${total_gross_revenue} / NULLIF(SUM(${total_gross_revenue}) OVER(), 0) ;;
-    value_format: "0.0%"
-    description: "Revenue as a % of total revenue across all brands."
+    sql: ${order_items.total_gross_revenue} / NULLIF(${order_items.total_gross_revenue},0) ;;
+    value_format_name: percent_2
+    description: "Calculates the percentage of total gross revenue contributed by each item."
   }
-
   measure: total_cost {
     type: sum
     sql: ${inventory_items.cost} ;;
@@ -44,7 +44,7 @@ view: +order_items{
   }
   measure: total_gross_margin_amount {
     type: number
-    sql:${total_gross_revenue} - ${total_cost}  ;;
+    sql: ${order_items.total_gross_revenue} - ${inventory_items.total_cost} ;;
     value_format_name: usd
     drill_fields: [products.category,products.brand]
     description: "Calculates the total gross margin amount by subtracting the total cost from the total gross revenue."
@@ -52,17 +52,17 @@ view: +order_items{
   measure: average_gross_margin {
     type: number
     sql: CASE WHEN ${order_items.total_gross_revenue} IS NOT NULL THEN
-         (${order_items.total_gross_revenue} - ${inventory_items.cost}) / NULLIF(${order_items.total_gross_revenue}, 0)
+         (${order_items.total_gross_revenue} - ${inventory_items.total_cost}) / NULLIF(${order_items.total_gross_revenue}, 0)
        ELSE NULL END ;;
     value_format_name: usd
     description: "Calculates the average gross margin as a percentage of total gross revenue."
   }
   measure: gross_margin_percentage {
     type: number
-    sql: ${total_gross_margin_amount} / NULLIF(${total_gross_revenue}, 0) ;;
+    sql: ${order_items.total_gross_margin_amount} / NULLIF(${order_items.total_gross_revenue}, 0) ;;
     value_format_name: percent_2
     drill_fields: [products.category, products.product_id]
-    description: "Calculates the gross margin percentage."
+    description: "Calculates the gross margin percentage by dividing the total gross margin amount by the total gross revenue."
   }
   measure: number_of_items_returned {
     type: count_distinct
@@ -104,84 +104,28 @@ view: +order_items{
     sql: ${order_items.sale_price} ;;
     drill_fields: [order_items.order_id]
     description: "Total sales revenue."
-    value_format: "$#,##0.00" # Changed to USD format with 2 decimals
   }
-  measure: mtd_users_count {
-    type: count_distinct
-    sql: ${user_id} ;; # Count distinct users for MTD
-    filters: [is_mtd: "yes"]
-    drill_fields: [user_id, created_date] # Example drill fields
+  measure: total_sales_new_customers {
+    type: sum
+    sql: CASE WHEN ${order_patterns_frequency.is_first_purchase} THEN ${order_items.sale_price} ELSE 0 END ;;
+    description: "Total sales revenue from new customers."
   }
-  measure: prv_mtd_users_count {
-    type: count_distinct
-    sql: ${user_id} ;; # Count distinct users for MTD
-    filters: [is_previous_mtd: "yes"]
-    drill_fields: [user_id, created_date] # Example drill fields
-  }
-  dimension: age_group {
-    type: tier
-    tiers: [15,26,36,51,66]
-    sql: ${users.age} ;;
-    style: integer
-    label: "Age Group" # User-friendly label for the UI
-  }
-  dimension: customer_type {
-    type: string
-    sql: CASE
-         WHEN DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), DAY) <= 90
-           THEN 'New Customer'
-         ELSE 'Longer-Term Customer'
-       END ;;
-  }
-  }
-view: +users{
 
-  dimension: days_since_signup {
+  measure: total_sales_returning_customers {
+    type: sum
+    sql: CASE WHEN NOT ${order_patterns_frequency.is_first_purchase} THEN ${order_items.sale_price} ELSE 0 END ;;
+    description: "Total sales revenue from returning customers."
+  }
+  measure: percent_new_customers {
     type: number
-    description: "The number of days since a customer has signed up on the website."
-    label: "Days Since Signup"
-    sql: DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), DAY) ;;
+    sql: ${total_sales_new_customers} / NULLIF(${total_sales}, 0) ;;
+    value_format_name: percent_2
+    description: "Percentage of total sales revenue from new customers."
   }
-  dimension: months_since_signup {
+  measure: percent_returning_customers {
     type: number
-    description: "The number of months since a customer has signed up on the website."
-    label: "Months Since Signup"
-    sql: DATE_DIFF(CURRENT_DATE(), DATE(${created_date}), MONTH) ;;
+    sql: ${total_sales_returning_customers} / NULLIF(${total_sales}, 0) ;;
+    value_format_name: percent_2
+    description: "Percentage of total sales revenue from returning customers."
   }
-
-
-  measure: average_days_since_signup {
-    type: average
-    description: "Average number of days between a customer initially registering and now."
-    label: "Average Number of Days Since Signup"
-    sql: ${days_since_signup} ;;
-    value_format_name: decimal_1
-  }
-
-  measure: average_months_since_signup {
-    type: average
-    description: "Average number of months between a customer initially registering and now."
-    label: "Average Number of Months Since Signup"
-    sql: ${months_since_signup} ;;
-    value_format_name: decimal_1
-  }
-  measure: order_count {
-    type: count_distinct
-    sql: ${id} ;;
-    label: "Order Count"
-    description: "The total count of unique orders."
-  }
-  measure: first_order_date {
-    type: min
-    sql: ${created_raw} ;;
-    label: "First Order Date"
-    description: "The date of the first order."
-  }
-  measure: latest_order_date {
-    type: max
-    sql: ${created_raw} ;;
-    label: "Latest Order Date"
-    description: "The date of the most recent order."
-  }
-
 }
