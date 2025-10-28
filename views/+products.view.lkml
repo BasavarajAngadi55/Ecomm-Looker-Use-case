@@ -34,14 +34,14 @@ view: +products {
     type: string
     suggest_explore: order_items
     # Using unqualified dimension name for suggestion within the same view
-    suggest_dimension: category
+    suggest_dimension:products.category
   }
 
   filter: select_brand {
     type: string
     suggest_explore: order_items
     # Using unqualified dimension name for suggestion within the same view
-    suggest_dimension: brand
+    suggest_dimension:products.brand
   }
 
   # 3. DYNAMIC COMPARISON DIMENSIONS (The core of the Brand Comparison Use Case)
