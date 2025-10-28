@@ -1,5 +1,5 @@
 # /views/products.view.lkml (Ensure this is the ONLY file defining this view)
-view: +products {
+view:+products {
   # The sql_table_name parameter indicates the underlying database table
   sql_table_name: `thelook.products` ;;
 
