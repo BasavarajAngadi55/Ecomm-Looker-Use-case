@@ -26,7 +26,7 @@ view: +products {
   }
 
   # Base drill field for the view
-  drill_fields: [id]
+  drill_fields: [products.id]
 
   # 2. FILTERS (For user input on the dashboard)
 
@@ -52,13 +52,13 @@ view: +products {
     sql:
       CASE
       WHEN {% condition select_category %}
-        ${category}
+        ${products.category}
         {% endcondition %}
-      THEN ${category}
+      THEN ${products.category}
       ELSE 'All Other Categories'
       END
       ;;
-    drill_fields: [brand]
+    drill_fields: [products.brand]
   }
 
   dimension: brand_comparison {
@@ -67,12 +67,12 @@ view: +products {
     sql:
       CASE
       WHEN {% condition select_brand %}
-        ${brand}
+        ${products.brand}
         {% endcondition %}
-      THEN ${brand}
+      THEN ${products.brand}
       ELSE 'All Other brands'
       END
       ;;
-    drill_fields: [category]
+    drill_fields: [products.category]
   }
 }
