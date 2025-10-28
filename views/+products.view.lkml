@@ -32,14 +32,15 @@ view: +products {
 
   filter: select_category {
     type: string
-    # The suggest_dimension uses the unqualified dimension name from this view
     suggest_explore: order_items
+    # Using unqualified dimension name for suggestion within the same view
     suggest_dimension: category
   }
 
   filter: select_brand {
     type: string
     suggest_explore: order_items
+    # Using unqualified dimension name for suggestion within the same view
     suggest_dimension: brand
   }
 
@@ -50,7 +51,6 @@ view: +products {
     type: string
     sql:
       CASE
-      # Liquid check: Is the row's category the one the user selected in the filter?
       WHEN {% condition select_category %}
         ${category}
         {% endcondition %}
@@ -66,12 +66,11 @@ view: +products {
     type: string
     sql:
       CASE
-      # Liquid check: Is the row's brand the one the user selected in the filter?
       WHEN {% condition select_brand %}
         ${brand}
         {% endcondition %}
       THEN ${brand}
-      ELSE ${brand} || ' - Other Brands'
+      ELSE 'All Other brands'
       END
       ;;
     drill_fields: [category]
